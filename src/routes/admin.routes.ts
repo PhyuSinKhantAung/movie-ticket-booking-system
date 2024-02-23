@@ -10,7 +10,7 @@ class AdminRoutes {
   }
 
   initializeRoutes() {
-    this.router.get("/", this.controller.getAdmins);
+    this.router.post("/", this.controller.create);
   }
 }
 

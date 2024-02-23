@@ -1,11 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+import catchAsync from "src/utils/catchAsync";
 export default class AdminController {
-  async getAdmins(req: Request, res: Response) {
-    try {
-      console.log("hello admins");
-      res.json({ message: req.body });
-    } catch (error) {
-      console.log(error);
-    }
+  wrapper = catchAsync;
+
+  async create() {
+    return catchAsync(async function createAdmin(
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ) {
+      console.log("hello world");
+      console.log(req.body);
+      res.json({ message: "success" });
+    });
   }
 }

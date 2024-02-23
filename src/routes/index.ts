@@ -15,13 +15,12 @@ export default class Routes {
     app.get("/", function (_req: Request, res: Response) {
       res.send("Welcome to movie ticket booking application");
     });
+    app.use("/api", apiRouter);
 
     app.use(function (_req: Request, res: Response, next) {
       next(new ContentNotFoundException("Resource not found"));
     });
 
     app.use(errorHandler);
-
-    app.use("/api", apiRouter);
   }
 }
