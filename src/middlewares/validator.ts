@@ -16,7 +16,10 @@ const validator = (opts: ValidateOpts) => {
       if (typeof schema !== "undefined") {
         const result = schema.safeParse(req[key]);
         if (!result.success) {
-          return next(new BadRequestException("Validation Error"));
+          const errorArray = Object.values(
+            result.error.flatten().fieldErrors,
+          ).flatMap((errorArray) => errorArray);
+          return next(new BadRequestException(...errorArray));
         }
         req[key] = result.data;
       }
