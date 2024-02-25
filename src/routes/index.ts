@@ -3,6 +3,7 @@ import { Application } from "express";
 import AdminRoutes from "./admin.routes";
 import { ContentNotFoundException } from "src/utils/http-exceptions.util";
 import errorHandler from "src/middlewares/errorHandler";
+import TheatreRoutes from "./theatre.routes";
 
 export default class Routes {
   router = Router();
@@ -11,11 +12,13 @@ export default class Routes {
     const apiRouter = this.router;
 
     apiRouter.use("/admins", AdminRoutes);
+    apiRouter.use("/theatres", TheatreRoutes);
+
+    app.use("/api", apiRouter);
 
     app.get("/", function (_req: Request, res: Response) {
       res.send("Welcome to movie ticket booking application");
     });
-    app.use("/api", apiRouter);
 
     app.use(function (_req: Request, res: Response, next) {
       next(new ContentNotFoundException("Resource not found"));
