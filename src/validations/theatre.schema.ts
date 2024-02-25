@@ -10,6 +10,13 @@ export type CreateTheatreBody = z.infer<typeof createTheatreSchema>;
 
 export const getTheatresSchema = z.object({
   search: z.string().optional(),
+  name: z.string().optional(),
+  //   page: z.coerce.number().default(1).transform(String),
+  //   limit: z.coerce.number().default(10).transform(String),
+  page: z.string().default("1"),
+  limit: z.string().default("10"),
+
+  sort: z.string().optional().default("-createdAt"),
 });
 
 export type GetTheatresQuery = z.infer<typeof getTheatresSchema>;
