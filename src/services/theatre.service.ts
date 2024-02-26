@@ -4,6 +4,7 @@ import { ContentNotFoundException } from "src/utils/http-exceptions.util";
 import {
   CreateTheatreBody,
   GetTheatresQuery,
+  UpdateTheatreBody,
 } from "src/validations/theatre.schema";
 
 export default class TheatreService {
@@ -38,6 +39,14 @@ export default class TheatreService {
 
   async getById(id: string) {
     const theatre = await this.Model.findById(id);
+    if (!theatre) throw new ContentNotFoundException("Theatre not found");
+    return theatre;
+  }
+
+  async updateById(id: string, update: UpdateTheatreBody) {
+    const theatre = await this.Model.findByIdAndUpdate(id, update, {
+      new: true,
+    });
     if (!theatre) throw new ContentNotFoundException("Theatre not found");
     return theatre;
   }

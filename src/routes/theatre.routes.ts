@@ -5,6 +5,7 @@ import {
   createTheatreSchema,
   getTheatresSchema,
   theatreIdParamsSchema,
+  updateTheatreSchema,
 } from "src/validations/theatre.schema";
 
 class TheatreRoutes {
@@ -32,6 +33,12 @@ class TheatreRoutes {
       "/:id",
       validator({ params: theatreIdParamsSchema }),
       this.controller.getTheatreById.bind(this.controller),
+    );
+
+    this.router.patch(
+      "/:id",
+      validator({ params: theatreIdParamsSchema, body: updateTheatreSchema }),
+      this.controller.updateTheatreById.bind(this.controller),
     );
 
     this.router.delete(
