@@ -5,7 +5,6 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  passwordConfirm: string;
   passwordChangedAt: Date;
   passwordResetExpires: Date;
   passwordResetToken: string;
@@ -31,10 +30,6 @@ const UserSchema = new mongoose.Schema<User>({
     required: true,
     select: false,
   },
-  passwordConfirm: {
-    type: String,
-    required: true,
-  },
   passwordChangedAt: Date,
   passwordResetExpires: Date,
   passwordResetToken: String,
@@ -47,8 +42,6 @@ const UserSchema = new mongoose.Schema<User>({
     type: String,
   },
 });
-
-export default mongoose.model<User>("User", UserSchema);
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -64,3 +57,5 @@ UserSchema.pre("save", function (next) {
   this.passwordChangedAt = new Date(Date.now() - 1000);
   next();
 });
+
+export default mongoose.model<User>("User", UserSchema);

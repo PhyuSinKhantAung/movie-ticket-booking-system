@@ -4,10 +4,13 @@ import { BadRequestException } from "src/utils/http-exceptions.util";
 import {
   CreateAdminBody,
   GetAdminsQuery,
+  LogInAdminBody,
   ROLES,
 } from "src/validations/admin.schema";
+import AuthController from "./auth.controller";
 export default class AdminController {
   service = new AdminService();
+  controller = new AuthController();
 
   async createAdmin(
     req: Request<unknown, unknown, CreateAdminBody, unknown>,
@@ -29,6 +32,47 @@ export default class AdminController {
       const data = await this.service.create(req.body);
 
       res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async login(
+    req: Request<unknown, unknown, LogInAdminBody, unknown>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const admin = await this.service.getAdminByEmail(req.body.email, true);
+
+      await this.controller.verifyPassword(req.body.password, admin.password);
+
+      const payload = {
+        id: admin._id.toString(),
+        email: admin.email,
+        type: "admin",
+      };
+
+      const accessToken = await this.controller.generateToken(
+        payload,
+        process.env.ACCESS_TOKEN_SECRET
+          ? String(process.env.ACCESS_TOKEN_SECRET)
+          : "",
+        "1hr",
+      );
+
+      const refreshToken = await this.controller.generateToken(
+        payload,
+        process.env.REFRESH_TOKEN_SECRET
+          ? String(process.env.REFRESH_TOKEN_SECRET)
+          : "",
+        "30d",
+      );
+
+      res.json({
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
       next(error);
     }
