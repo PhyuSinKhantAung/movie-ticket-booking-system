@@ -2,6 +2,7 @@ import {
   adminIdParamsSchema,
   createAdminBodySchema,
   getAdminsSchema,
+  logInAdminSchema,
   updateAdminSchema,
 } from "./../validations/admin.schema";
 import { Router } from "express";
@@ -23,6 +24,13 @@ class AdminRoutes {
       this.controller.createAdmin.bind(this.controller),
     );
 
+    this.router.post(
+      "/login",
+      validator({ body: logInAdminSchema }),
+      this.controller.login.bind(this.controller),
+    );
+
+    // ** Warning these below routes will be required authentication **//
     this.router.get(
       "/",
       validator({ query: getAdminsSchema }),

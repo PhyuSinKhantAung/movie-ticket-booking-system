@@ -53,3 +53,14 @@ export const adminIdParamsSchema = z.object({
 });
 
 export type adminIdParams = z.infer<typeof adminIdParamsSchema>;
+
+export const logInAdminSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required." })
+    .email("Please provide a valid email."),
+  password: z
+    .string({ required_error: "Password is required." })
+    .min(6, "Password must have at least 6 characters."),
+});
+
+export type LogInAdminBody = z.infer<typeof logInAdminSchema>;

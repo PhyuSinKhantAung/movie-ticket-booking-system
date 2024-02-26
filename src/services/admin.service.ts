@@ -54,6 +54,17 @@ export default class AdminService {
     return theatre;
   }
 
+  async getAdminByEmail(email: string, isSelectPassword: boolean = false) {
+    const user = isSelectPassword
+      ? await this.Model.findOne({ email }).select("+password")
+      : await this.Model.findOne({ email });
+
+    if (!user)
+      throw new ContentNotFoundException("Admin not found by this email");
+
+    return user;
+  }
+
   async updateById(id: string, update: UpdateAdminBody) {
     const theatre = await this.Model.findByIdAndUpdate(id, update, {
       new: true,
