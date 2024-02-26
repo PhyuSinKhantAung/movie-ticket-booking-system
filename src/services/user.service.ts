@@ -29,4 +29,10 @@ export default class UserService {
 
     return user;
   }
+
+  async getById(id: string) {
+    const user = await this.Model.findById(id);
+    if (!user) throw new ContentNotFoundException("User not found");
+    return user;
+  }
 }

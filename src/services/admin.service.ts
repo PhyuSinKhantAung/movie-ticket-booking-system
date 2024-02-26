@@ -49,9 +49,9 @@ export default class AdminService {
   }
 
   async getById(id: string) {
-    const theatre = await this.Model.findById(id);
-    if (!theatre) throw new ContentNotFoundException("Theatre not found");
-    return theatre;
+    const admin = await this.Model.findById(id);
+    if (!admin) throw new ContentNotFoundException("Admin not found");
+    return admin;
   }
 
   async getAdminByEmail(email: string, isSelectPassword: boolean = false) {
@@ -66,11 +66,11 @@ export default class AdminService {
   }
 
   async updateById(id: string, update: UpdateAdminBody) {
-    const theatre = await this.Model.findByIdAndUpdate(id, update, {
+    const admin = await this.Model.findByIdAndUpdate(id, update, {
       new: true,
     });
-    if (!theatre) throw new ContentNotFoundException("Theatre not found");
-    return theatre;
+    if (!admin) throw new ContentNotFoundException("Admin not found");
+    return admin;
   }
 
   async deleteById(id: string) {
