@@ -13,16 +13,19 @@ export const createAdminBodySchema = z.object({
     .string({ required_error: "Password is required." })
     .min(6, "Password must have at least 6 characters."),
   role: z.enum(ROLES),
-  theatre: z.string().refine((val) => {
-    return mongoose.Types.ObjectId.isValid(val);
-  }),
+  theatre: z
+    .string()
+    .refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    })
+    .optional(),
 });
 
 export type CreateAdminBody = z.infer<typeof createAdminBodySchema>;
 
 export const getAdminsSchema = z.object({
   search: z.string().optional(),
-  name: z.string().optional(),
+  role: z.string().optional(),
   page: z.coerce.number().default(1).transform(String),
   limit: z.coerce.number().default(10).transform(String),
   sort: z.string().optional().default("-createdAt"),

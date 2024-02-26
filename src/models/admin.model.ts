@@ -10,33 +10,38 @@ export interface Admin extends Document {
   theatre: mongoose.Schema.Types.ObjectId;
 }
 
-const AdminSchema = new mongoose.Schema<Admin>({
-  name: {
-    type: String,
-    required: true,
+const AdminSchema = new mongoose.Schema<Admin>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ROLES,
+      required: true,
+    },
+    theatre: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Theatre",
+      default: null,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    unique: true,
+  {
+    timestamps: true,
   },
-  password: {
-    type: String,
-    required: true,
-    select: false,
-  },
-  role: {
-    type: String,
-    enum: ROLES,
-    required: true,
-  },
-  theatre: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Theatre",
-  },
-});
+);
 
 AdminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
