@@ -1,12 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+import { ROLES } from "src/validations/admin.schema";
+import bcrypt from "bcrypt";
 
-export interface Admin {
+export interface Admin extends Document {
   name: string;
   email: string;
   password: string;
   role: string;
-  //TODO will fix soon
-  //   theatre_id: string;
+  theatre: mongoose.Schema.Types.ObjectId;
 }
 
 const AdminSchema = new mongoose.Schema<Admin>({
@@ -27,12 +28,22 @@ const AdminSchema = new mongoose.Schema<Admin>({
   },
   role: {
     type: String,
+    enum: ROLES,
     required: true,
   },
-  //TODO will fix soon
-  //     theatre_id: {
+  theatre: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Theatre",
+  },
+});
 
-  //   }
+AdminSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+
+  return next();
 });
 
 export default mongoose.model<Admin>("Admin", AdminSchema);

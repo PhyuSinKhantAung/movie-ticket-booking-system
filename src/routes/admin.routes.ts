@@ -1,4 +1,9 @@
-import { createAdminBodySchema } from "./../validations/admin.schema";
+import {
+  adminIdParamsSchema,
+  createAdminBodySchema,
+  getAdminsSchema,
+  updateAdminSchema,
+} from "./../validations/admin.schema";
 import { Router } from "express";
 import AdminController from "src/controllers/admin.controller";
 import validator from "src/middlewares/validator";
@@ -16,6 +21,30 @@ class AdminRoutes {
       "/",
       validator({ body: createAdminBodySchema }),
       this.controller.createAdmin.bind(this.controller),
+    );
+
+    this.router.get(
+      "/",
+      validator({ query: getAdminsSchema }),
+      this.controller.getAdmins.bind(this.controller),
+    );
+
+    this.router.get(
+      "/:id",
+      validator({ params: adminIdParamsSchema }),
+      this.controller.getAdminById.bind(this.controller),
+    );
+
+    this.router.patch(
+      "/:id",
+      validator({ params: adminIdParamsSchema, body: updateAdminSchema }),
+      this.controller.updateAdminById.bind(this.controller),
+    );
+
+    this.router.delete(
+      "/:id",
+      validator({ params: adminIdParamsSchema }),
+      this.controller.deleteAdminById.bind(this.controller),
     );
   }
 }

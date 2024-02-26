@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 export interface User {
   name: string;
@@ -9,6 +10,7 @@ export interface User {
   passwordResetExpires: Date;
   passwordResetToken: string;
   active: boolean;
+  //TODo will fix this as reference
   //   location: mongoose.Schema.Types.ObjectId;
   location: string;
 }
@@ -47,3 +49,18 @@ const UserSchema = new mongoose.Schema<User>({
 });
 
 export default mongoose.model<User>("User", UserSchema);
+
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+
+  return next();
+});
+
+UserSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = new Date(Date.now() - 1000);
+  next();
+});
