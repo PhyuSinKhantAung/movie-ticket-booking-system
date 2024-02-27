@@ -1,4 +1,6 @@
 import {
+  forgotPasswordSchema,
+  resetPasswordSchema,
   signInUserSchema,
   signUpUserSchema,
 } from "./../validations/user.schema";
@@ -31,7 +33,17 @@ class UserRoutes {
       this.controller.signin.bind(this.controller),
     );
 
-    //TODO will integrate forgot password/ reset password logic soon
+    this.router.post(
+      "/forgotPassword",
+      validator({ body: forgotPasswordSchema }),
+      this.controller.forgotPassword.bind(this.controller),
+    );
+
+    this.router.patch(
+      "/resetPassword/:token",
+      validator({ body: resetPasswordSchema }),
+      this.controller.resetPassword.bind(this.controller),
+    );
   }
 }
 

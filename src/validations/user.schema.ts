@@ -23,3 +23,27 @@ export const signInUserSchema = z.object({
 });
 
 export type SignInUserBody = z.infer<typeof signInUserSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required." })
+    .email("Please provide a valid email."),
+});
+
+export type ForgotPasswordBody = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z.object({
+  newPassword: z
+    .string({ required_error: "newPassword is required." })
+    .min(6, "Password must have at least 6 characters."),
+});
+
+export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>;
+
+export const passwordResetTokenParamsSchema = z.object({
+  token: z.string({ required_error: "Password reset token is required" }),
+});
+
+export type PasswordResetTokenParams = z.infer<
+  typeof passwordResetTokenParamsSchema
+>;

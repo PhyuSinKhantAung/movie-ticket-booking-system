@@ -1,5 +1,6 @@
 import UserModel from "src/models/user.model";
 import {
+  BadRequestException,
   ContentNotFoundException,
   ExistenceConflictException,
 } from "src/utils/http-exceptions.util";
@@ -33,6 +34,12 @@ export default class UserService {
   async getById(id: string) {
     const user = await this.Model.findById(id);
     if (!user) throw new ContentNotFoundException("User not found");
+    return user;
+  }
+
+  async getUserByPasswordResetToken(token: string) {
+    const user = await this.Model.findOne({ passwordResetToken: token });
+    if (!user) throw new BadRequestException("Invalid password reset token");
     return user;
   }
 }

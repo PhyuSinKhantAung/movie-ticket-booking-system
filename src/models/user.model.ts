@@ -1,20 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
-export interface User {
+export interface User extends Document {
   name: string;
   email: string;
   password: string;
   passwordChangedAt: Date;
-  passwordResetExpires: Date;
-  passwordResetToken: string;
+  passwordResetExpires?: Date;
+  passwordResetToken?: string;
   active: boolean;
   //TODo will fix this as reference
   //   location: mongoose.Schema.Types.ObjectId;
   location: string;
 }
 
-const UserSchema = new mongoose.Schema<User>({
+interface UserMethods {
+  changedPasswordAfter(): boolean;
+  createPasswordResetToken(): string;
+}
+
+type UserModel = Model<User, unknown, UserMethods>;
+
+const UserSchema = new mongoose.Schema<User, UserModel, UserMethods>({
   name: {
     type: String,
     required: true,
@@ -58,4 +66,36 @@ UserSchema.pre("save", function (next) {
   next();
 });
 
-export default mongoose.model<User>("User", UserSchema);
+UserSchema.method(
+  "changedPasswordAfter",
+  function changedPasswordAfter(this: User, JWTTimestamp: number): boolean {
+    if (this.passwordChangedAt) {
+      const changedTimestamp = parseInt(
+        (this.passwordChangedAt.getTime() / 1000).toString(),
+        10,
+      );
+
+      return JWTTimestamp < changedTimestamp;
+    }
+
+    return false;
+  },
+);
+UserSchema.method(
+  "createPasswordResetToken",
+  function createPasswordResetToken(this: User) {
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    this.passwordResetToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    console.log({ resetToken }, this.passwordResetToken);
+
+    this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+    return resetToken;
+  },
+);
+
+export default mongoose.model<User, UserModel>("User", UserSchema);
