@@ -40,10 +40,8 @@ export const resetPasswordSchema = z.object({
 
 export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>;
 
-export const passwordResetTokenParamsSchema = z.object({
+export const tokenSchema = z.object({
   token: z.string({ required_error: "Password reset token is required" }),
 });
 
-export type PasswordResetTokenParams = z.infer<
-  typeof passwordResetTokenParamsSchema
->;
+export type Token = z.infer<typeof tokenSchema>;

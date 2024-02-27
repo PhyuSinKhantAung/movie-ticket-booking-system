@@ -3,6 +3,7 @@ import {
   resetPasswordSchema,
   signInUserSchema,
   signUpUserSchema,
+  tokenSchema,
 } from "./../validations/user.schema";
 import { Router } from "express";
 import UserController from "src/controllers/user.controller";
@@ -41,8 +42,13 @@ class UserRoutes {
 
     this.router.patch(
       "/resetPassword/:token",
-      validator({ body: resetPasswordSchema }),
+      validator({ body: resetPasswordSchema, params: tokenSchema }),
       this.controller.resetPassword.bind(this.controller),
+    );
+    this.router.post(
+      "/refreshToken",
+      validator({ body: tokenSchema }),
+      this.controller.refreshToken.bind(this.controller),
     );
   }
 }

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import UserService from "src/services/user.service";
 import {
   ForgotPasswordBody,
-  PasswordResetTokenParams,
+  Token,
   ResetPasswordBody,
   SignInUserBody,
   SignUpUserBody,
@@ -130,7 +130,7 @@ export default class UserController {
   }
 
   async resetPassword(
-    req: Request<PasswordResetTokenParams, unknown, ResetPasswordBody, unknown>,
+    req: Request<Token, unknown, ResetPasswordBody, unknown>,
     res: Response,
     next: NextFunction,
   ) {
@@ -172,6 +172,22 @@ export default class UserController {
         accessToken,
         refreshToken,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async refreshToken(
+    req: Request<unknown, unknown, Token, unknown>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const accessToken =
+        await this.controller.generateAccessTokenWithRefreshToken(
+          req.body.token,
+        );
+      res.json({ accessToken });
     } catch (error) {
       next(error);
     }
