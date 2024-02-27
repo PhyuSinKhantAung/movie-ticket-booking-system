@@ -35,4 +35,22 @@ export default class AuthController {
     const valid = await compare(rawPassword, hashedPassword);
     if (!valid) throw new NotAuthenticatedException("Invalid password");
   }
+
+  async generateAccessTokenWithRefreshToken(refreshToken: string) {
+    const decoded: TokenPayload = await this.verifyToken({
+      token: refreshToken,
+      secret: process.env.REFRESH_TOKEN_SECRET
+        ? String(process.env.REFRESH_TOKEN_SECRET)
+        : "",
+    });
+
+    const accessToken = this.generateToken(
+      decoded,
+      process.env.ACCESS_TOKEN_SECRET
+        ? String(process.env.ACCESS_TOKEN_SECRET)
+        : "",
+      "1h",
+    );
+    return accessToken;
+  }
 }
