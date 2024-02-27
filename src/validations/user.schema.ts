@@ -41,7 +41,7 @@ export const resetPasswordSchema = z.object({
 export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>;
 
 export const tokenSchema = z.object({
-  token: z.string({ required_error: "Password reset token is required" }),
+  token: z.string({ required_error: "Token is required" }),
 });
 
 export type Token = z.infer<typeof tokenSchema>;
