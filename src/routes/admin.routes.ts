@@ -9,6 +9,7 @@ import { Router } from "express";
 import AdminController from "src/controllers/admin.controller";
 import authenticator from "src/middlewares/authenticator";
 import validator from "src/middlewares/validator";
+import { tokenSchema } from "src/validations/user.schema";
 
 class AdminRoutes {
   router = Router();
@@ -29,6 +30,12 @@ class AdminRoutes {
       "/login",
       validator({ body: logInAdminSchema }),
       this.controller.login.bind(this.controller),
+    );
+
+    this.router.post(
+      "/refreshToken",
+      validator({ body: tokenSchema }),
+      this.controller.refreshToken.bind(this.controller),
     );
 
     // ** Warning these below routes will be required authentication **//

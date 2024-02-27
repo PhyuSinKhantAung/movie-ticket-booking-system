@@ -45,6 +45,7 @@ class UserRoutes {
       validator({ body: resetPasswordSchema, params: tokenSchema }),
       this.controller.resetPassword.bind(this.controller),
     );
+
     this.router.post(
       "/refreshToken",
       validator({ body: tokenSchema }),

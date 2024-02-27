@@ -8,6 +8,7 @@ import {
   ROLES,
 } from "src/validations/admin.schema";
 import AuthController from "./auth.controller";
+import { Token } from "src/validations/user.schema";
 export default class AdminController {
   service = new AdminService();
   controller = new AuthController();
@@ -73,6 +74,22 @@ export default class AdminController {
         accessToken,
         refreshToken,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async refreshToken(
+    req: Request<unknown, unknown, Token, unknown>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const accessToken =
+        await this.controller.generateAccessTokenWithRefreshToken(
+          req.body.token,
+        );
+      res.json({ accessToken });
     } catch (error) {
       next(error);
     }
