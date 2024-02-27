@@ -30,6 +30,8 @@ class UserRoutes {
       }),
       this.controller.signin.bind(this.controller),
     );
+
+    //TODO will integrate forgot password/ reset password logic soon
   }
 }
 

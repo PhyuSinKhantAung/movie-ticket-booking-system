@@ -1,5 +1,6 @@
 import { Router } from "express";
 import TheatreController from "src/controllers/theatre.controller";
+import authenticator from "src/middlewares/authenticator";
 import validator from "src/middlewares/validator";
 import {
   createTheatreSchema,
@@ -17,12 +18,6 @@ class TheatreRoutes {
   }
 
   initializeRoutes() {
-    this.router.post(
-      "/",
-      validator({ body: createTheatreSchema }),
-      this.controller.createTheatre.bind(this.controller),
-    );
-
     this.router.get(
       "/",
       validator({ query: getTheatresSchema }),
@@ -35,14 +30,23 @@ class TheatreRoutes {
       this.controller.getTheatreById.bind(this.controller),
     );
 
+    this.router.post(
+      "/",
+      authenticator as never,
+      validator({ body: createTheatreSchema }),
+      this.controller.createTheatre.bind(this.controller),
+    );
+
     this.router.patch(
       "/:id",
+      authenticator as never,
       validator({ params: theatreIdParamsSchema, body: updateTheatreSchema }),
       this.controller.updateTheatreById.bind(this.controller),
     );
 
     this.router.delete(
       "/:id",
+      authenticator as never,
       validator({ params: theatreIdParamsSchema }),
       this.controller.deleteTheatreById.bind(this.controller),
     );
