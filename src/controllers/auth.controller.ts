@@ -5,7 +5,6 @@ import { NotAuthenticatedException } from "src/utils/http-exceptions.util";
 export interface TokenPayload {
   id: string;
   email: string;
-  // TODO should have enum types
   type: string;
 }
 
@@ -44,12 +43,18 @@ export default class AuthController {
         : "",
     });
 
-    const accessToken = this.generateToken(
-      decoded,
+    const payload = {
+      id: decoded.id,
+      email: decoded.email,
+      type: decoded.type,
+    };
+
+    const accessToken = await this.generateToken(
+      payload,
       process.env.ACCESS_TOKEN_SECRET
         ? String(process.env.ACCESS_TOKEN_SECRET)
         : "",
-      "1h",
+      "1hr",
     );
     return accessToken;
   }
