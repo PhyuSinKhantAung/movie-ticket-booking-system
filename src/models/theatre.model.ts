@@ -2,7 +2,10 @@ import mongoose, { Document } from "mongoose";
 
 export interface Theatre extends Document {
   name: string;
-  logo?: string;
+  logo?: {
+    url: string;
+    public_id: string;
+  };
 }
 
 const TheatreSchema = new mongoose.Schema<Theatre>(
@@ -11,7 +14,10 @@ const TheatreSchema = new mongoose.Schema<Theatre>(
       type: String,
       required: true,
     },
-    logo: String,
+    logo: {
+      url: String,
+      public_id: String,
+    },
   },
   {
     timestamps: true,

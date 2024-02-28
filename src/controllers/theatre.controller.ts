@@ -7,7 +7,10 @@ export default class TheatreController {
 
   async createTheatre(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.create(req.body);
+      const data = await this.service.create({
+        ...req.body,
+        logo: req.body.image,
+      });
       res.json(data);
     } catch (error) {
       next(error);
@@ -38,7 +41,10 @@ export default class TheatreController {
 
   async updateTheatreById(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.updateById(req.params.id, req.body);
+      const data = await this.service.updateById(req.params.id, {
+        ...req.body,
+        logo: req.body.image,
+      });
       res.json(data);
     } catch (error) {
       next(error);

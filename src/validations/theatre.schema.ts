@@ -3,7 +3,12 @@ import mongoose from "mongoose";
 
 export const createTheatreSchema = z.object({
   name: z.string({ required_error: "Theatre name is required" }),
-  logo: z.string().optional(),
+  image: z
+    .object({
+      url: z.string(),
+      public_id: z.string(),
+    })
+    .optional(),
 });
 
 export type CreateTheatreBody = z.infer<typeof createTheatreSchema>;
@@ -19,7 +24,12 @@ export type GetTheatresQuery = z.infer<typeof getTheatresSchema>;
 
 export const updateTheatreSchema = z.object({
   name: z.string().optional(),
-  logo: z.string().optional(),
+  image: z
+    .object({
+      url: z.string(),
+      public_id: z.string(),
+    })
+    .optional(),
 });
 
 export type UpdateTheatreBody = z.infer<typeof updateTheatreSchema>;
