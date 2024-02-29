@@ -2,7 +2,7 @@ import { z } from "zod";
 import mongoose from "mongoose";
 
 export const createMovieSchema = z.object({
-  title: z.string({ required_error: "Movie name is required" }),
+  title: z.string({ required_error: "Movie title is required" }),
   image: z
     .object({
       url: z.string(),
@@ -18,9 +18,9 @@ export const createMovieSchema = z.object({
     )
     .optional(),
   genres: z.array(z.string()),
-  releasedDate: z.coerce.date().transform(String),
-  duration: z.number(),
-  language: z.string(),
+  releasedDate: z.coerce.date().transform(String).optional(),
+  duration: z.number({ required_error: "duration is required" }),
+  language: z.string({ required_error: "language is required" }),
 });
 
 export type CreateMovieBody = z.infer<typeof createMovieSchema>;

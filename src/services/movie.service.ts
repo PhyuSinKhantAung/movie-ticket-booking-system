@@ -11,6 +11,7 @@ export default class MovieService {
   Model = MovieModel;
 
   async create(data: CreateMovieBody) {
+    console.log("hi");
     const movie = await this.Model.create(data);
     return movie;
   }
