@@ -12,7 +12,7 @@ export interface User extends Document {
   active: boolean;
   //TODo will fix this as reference
   //   location: mongoose.Schema.Types.ObjectId;
-  location: string;
+  region: string;
 }
 
 interface UserMethods {
@@ -46,8 +46,9 @@ const UserSchema = new mongoose.Schema<User, UserModel, UserMethods>({
     default: true,
     select: false,
   },
-  location: {
+  region: {
     type: String,
+    default: "yangon",
   },
 });
 
