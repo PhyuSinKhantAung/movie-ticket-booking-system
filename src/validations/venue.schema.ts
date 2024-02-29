@@ -2,7 +2,7 @@ import { z } from "zod";
 import mongoose from "mongoose";
 
 export const createVenueSchema = z.object({
-  theatre: z.string().refine((val) => {
+  theatre: z.string({ required_error: "theatre is required" }).refine((val) => {
     return mongoose.Types.ObjectId.isValid(val);
   }),
   region: z.string({ required_error: "region is required" }),
@@ -17,6 +17,13 @@ export const getVenuesSchema = z.object({
   page: z.coerce.number().default(1).transform(String),
   limit: z.coerce.number().default(10).transform(String),
   sort: z.string().optional().default("-createdAt"),
+  theatre: z
+    .string({ required_error: "theatre is required" })
+    .refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    })
+    .optional(),
+  region: z.string().optional(),
 });
 export type GetVenuesQuery = z.infer<typeof getVenuesSchema>;
 

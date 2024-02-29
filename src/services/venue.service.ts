@@ -22,7 +22,10 @@ export default class VenueService {
         : {}),
     };
 
-    const features = new APIFeatures(this.Model.find(), query)
+    const features = new APIFeatures(
+      this.Model.find().populate("theatre"),
+      query,
+    )
       .filter(customFilter)
       .paginate()
       .limitFields()
