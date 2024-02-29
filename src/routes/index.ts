@@ -1,10 +1,11 @@
 import { Request, Response, Router } from "express";
 import { Application } from "express";
-import AdminRoutes from "./admin.routes";
 import { ContentNotFoundException } from "src/utils/http-exceptions.util";
 import errorHandler from "src/middlewares/errorHandler";
-import TheatreRoutes from "./theatre.routes";
 import UserRoutes from "./user.routes";
+import AdminRoutes from "./admin.routes";
+import TheatreRoutes from "./theatre.routes";
+import MovieRoutes from "./movie.routes";
 
 export default class Routes {
   router = Router();
@@ -15,6 +16,7 @@ export default class Routes {
     apiRouter.use("/admins", AdminRoutes);
     apiRouter.use("/theatres", TheatreRoutes);
     apiRouter.use("/users", UserRoutes);
+    apiRouter.use("/movies", MovieRoutes);
 
     app.use("/api", apiRouter);
 
