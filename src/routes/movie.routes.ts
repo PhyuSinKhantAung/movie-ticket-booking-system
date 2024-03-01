@@ -1,5 +1,4 @@
 import { Router } from "express";
-import TheatreController from "src/controllers/theatre.controller";
 import authenticator from "src/middlewares/authenticator";
 import validator from "src/middlewares/validator";
 import { upload, uploadToCloudinary } from "src/middlewares/imageUploader";
@@ -9,10 +8,11 @@ import {
   movieIdParamsSchema,
   updateMovieSchema,
 } from "src/validations/movie.schema";
+import MovieController from "src/controllers/movie.controller";
 
 class MovieRoutes {
   router = Router();
-  controller = new TheatreController();
+  controller = new MovieController();
 
   constructor() {
     this.initializeRoutes();
@@ -22,38 +22,41 @@ class MovieRoutes {
     this.router.get(
       "/",
       validator({ query: getMoviesSchema }),
-      this.controller.getTheatres.bind(this.controller),
+      this.controller.getMovies.bind(this.controller),
     );
 
     this.router.get(
       "/:id",
       validator({ params: movieIdParamsSchema }),
-      this.controller.getTheatreById.bind(this.controller),
+      this.controller.getMovieById.bind(this.controller),
     );
 
     this.router.post(
       "/",
       authenticator as never,
       upload.single("image"),
-      uploadToCloudinary,
+      uploadToCloudinary as never,
       validator({ body: createMovieSchema }),
-      this.controller.createTheatre.bind(this.controller),
+      this.controller.createMovie.bind(this.controller),
     );
 
     this.router.patch(
       "/:id",
       authenticator as never,
-      upload.single("image"),
-      uploadToCloudinary,
+      upload.fields([
+        { name: "image", maxCount: 1 },
+        { name: "images", maxCount: 5 },
+      ]),
+      uploadToCloudinary as never,
       validator({ params: movieIdParamsSchema, body: updateMovieSchema }),
-      this.controller.updateTheatreById.bind(this.controller),
+      this.controller.updateMovieById.bind(this.controller),
     );
 
     this.router.delete(
       "/:id",
       authenticator as never,
       validator({ params: movieIdParamsSchema }),
-      this.controller.deleteTheatreById.bind(this.controller),
+      this.controller.deleteMovieById.bind(this.controller),
     );
   }
 }

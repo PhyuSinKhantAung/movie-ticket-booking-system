@@ -35,8 +35,8 @@ class TheatreRoutes {
     this.router.post(
       "/",
       authenticator as never,
-      upload.single("image"),
-      uploadToCloudinary,
+      upload.fields([{ name: "image", maxCount: 1 }]),
+      uploadToCloudinary as never,
       validator({ body: createTheatreSchema }),
       this.controller.createTheatre.bind(this.controller),
     );
@@ -44,8 +44,8 @@ class TheatreRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
-      upload.single("image"),
-      uploadToCloudinary,
+      upload.fields([{ name: "image", maxCount: 1 }]),
+      uploadToCloudinary as never,
       validator({ params: theatreIdParamsSchema, body: updateTheatreSchema }),
       this.controller.updateTheatreById.bind(this.controller),
     );

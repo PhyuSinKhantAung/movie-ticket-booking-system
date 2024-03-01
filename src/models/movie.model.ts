@@ -44,7 +44,7 @@ const MovieSchema = new mongoose.Schema<Movie>(
     ],
     releasedDate: {
       type: Date,
-      required: true,
+      // required: true,
     },
     duration: {
       type: Number,

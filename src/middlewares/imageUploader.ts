@@ -34,94 +34,87 @@ type Image = {
   public_id: string;
 };
 
+interface FileRequest extends Request {
+  files: {
+    images: CloudinaryFile[];
+    image: CloudinaryFile[];
+  };
+}
 export const uploadToCloudinary = async (
-  req: Request,
+  req: FileRequest,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const files: CloudinaryFile[] = req.files as CloudinaryFile[];
-    const file: CloudinaryFile = req.file as CloudinaryFile;
-
-    if (!files && !file) {
+    if (!req.files?.image && !req.files?.images) {
       return next();
     }
+    const files: CloudinaryFile[] =
+      req.files?.images && (req.files?.images as CloudinaryFile[]);
+    const file: CloudinaryFile =
+      req.files?.image && (req.files?.image[0] as CloudinaryFile);
 
+    const cloudinaryUrls: Image[] = [];
     let cloudinaryUrl: Image = {
       url: "",
       public_id: "",
     };
-    const resizedBuffer: Buffer = await sharp(file.buffer)
-      .resize({ width: 800, height: 600 })
-      .toBuffer();
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        folder: "movie-ticket-booking-system",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any,
-      (
-        err: UploadApiErrorResponse | undefined,
-        result: UploadApiResponse | undefined,
-      ) => {
-        if (err) {
-          console.error("Cloudinary upload error:", err);
-          return next(err);
-        }
-        if (!result) {
-          console.error("Cloudinary upload error: Result is undefined");
-          return next(new Error("Cloudinary upload result is undefined"));
-        }
-        cloudinaryUrl = { url: result.secure_url, public_id: result.public_id };
 
-        //file processed now get your image here
-        req.body.image = cloudinaryUrl;
-        next();
-      },
-    );
-    uploadStream.end(resizedBuffer);
+    if (file) {
+      const uploadResult: Image = await new Promise((resolve) => {
+        cloudinary.uploader
+          .upload_stream(
+            (error: UploadApiErrorResponse, result: UploadApiResponse) => {
+              if (error) {
+                console.error("Cloudinary upload error:", error);
+                return next(error);
+              }
+              cloudinaryUrl = {
+                url: result.secure_url,
+                public_id: result.public_id,
+              };
 
-    const cloudinaryUrls: Image[] = [];
+              resolve(cloudinaryUrl);
+            },
+          )
+          .end(file.buffer);
+      });
+
+      req.body.image = uploadResult;
+    }
 
     if (files) {
-      for (const file of files) {
-        const resizedBuffer: Buffer = await sharp(file.buffer)
-          .resize({ width: 800, height: 600 })
-          .toBuffer();
+      await Promise.all(
+        files?.map(async (file: CloudinaryFile) => {
+          const resizedBuffer: Buffer = await sharp(file.buffer)
+            .resize({ width: 800, height: 600 })
+            .toBuffer();
 
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            resource_type: "auto",
-            folder: "movie-ticket-booking-system",
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
-          (
-            err: UploadApiErrorResponse | undefined,
-            result: UploadApiResponse | undefined,
-          ) => {
-            if (err) {
-              console.error("Cloudinary upload error:", err);
-              return next(err);
-            }
-            if (!result) {
-              console.error("Cloudinary upload error: Result is undefined");
-              return next(new Error("Cloudinary upload result is undefined"));
-            }
-            cloudinaryUrls.push({
-              url: result.secure_url,
-              public_id: result.public_id,
-            });
+          const uploadResults: Image[] = await new Promise((resolve) => {
+            cloudinary.uploader
+              .upload_stream(
+                (error: UploadApiErrorResponse, result: UploadApiResponse) => {
+                  if (error) {
+                    console.error("Cloudinary upload error:", error);
+                    return next(error);
+                  }
 
-            if (cloudinaryUrls.length === files.length) {
-              //All files processed now get your images here
-              req.body.images = cloudinaryUrls;
-              next();
-            }
-          },
-        );
-        uploadStream.end(resizedBuffer);
-      }
+                  cloudinaryUrls.push({
+                    url: result.secure_url,
+                    public_id: result.public_id,
+                  });
+
+                  resolve(cloudinaryUrls);
+                },
+              )
+              .end(resizedBuffer);
+          });
+
+          req.body.images = uploadResults;
+        }),
+      );
     }
+    next();
   } catch (error) {
     console.error("Error in uploadToCloudinary middleware:", error);
     next(error);

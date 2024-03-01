@@ -6,6 +6,7 @@ import UserRoutes from "./user.routes";
 import AdminRoutes from "./admin.routes";
 import TheatreRoutes from "./theatre.routes";
 import MovieRoutes from "./movie.routes";
+import VenueRoutes from "./venue.routes";
 
 export default class Routes {
   router = Router();
@@ -17,6 +18,7 @@ export default class Routes {
     apiRouter.use("/theatres", TheatreRoutes);
     apiRouter.use("/users", UserRoutes);
     apiRouter.use("/movies", MovieRoutes);
+    apiRouter.use("/venues", VenueRoutes);
 
     app.use("/api", apiRouter);
 
