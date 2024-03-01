@@ -65,7 +65,6 @@ export const uploadToCloudinary = async (
         cloudinary.uploader
           .upload_stream(
             (error: UploadApiErrorResponse, result: UploadApiResponse) => {
-              // return resolve(uploadResult);
               if (error) {
                 console.error("Cloudinary upload error:", error);
                 return next(error);
