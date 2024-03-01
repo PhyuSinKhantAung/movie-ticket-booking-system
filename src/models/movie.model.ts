@@ -17,6 +17,10 @@ export interface Movie extends Document {
   ratingsAverage?: number;
   ratingsQuantity?: number;
   isPublished?: boolean;
+  year: string;
+  director: string;
+  plot: string;
+  country: string;
 }
 
 const MovieSchema = new mongoose.Schema<Movie>(

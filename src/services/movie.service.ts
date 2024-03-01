@@ -12,6 +12,7 @@ export default class MovieService {
 
   async create(data: CreateMovieBody) {
     const movie = await this.Model.create(data);
+
     return movie;
   }
 

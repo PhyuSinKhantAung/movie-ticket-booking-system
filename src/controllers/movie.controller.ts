@@ -1,13 +1,25 @@
 import { NextFunction, Response, Request } from "express";
+import { Movie } from "src/models/movie.model";
 import MovieService from "src/services/movie.service";
+import MovieTimeService from "src/services/movieTime.service";
 import { GetMoviesQuery } from "src/validations/movie.schema";
 
 export default class MovieController {
   service = new MovieService();
+  movieTimeService = new MovieTimeService();
 
   async createMovie(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.create(req.body);
+      const data: Movie = await this.service.create(req.body);
+
+      const movieTimePayload = { movie: data._id };
+      const movieTime = await this.movieTimeService.create(movieTimePayload);
+
+      // 2: 30 duration
+      // 10 - 12: 30
+      // 1 - 3: 30
+      // 4 - 6:30
+
       res.json(data);
     } catch (error) {
       next(error);
