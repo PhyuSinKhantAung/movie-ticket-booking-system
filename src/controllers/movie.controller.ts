@@ -7,8 +7,6 @@ export default class MovieController {
 
   async createMovie(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("hi========>");
-
       const data = await this.service.create(req.body);
       res.json(data);
     } catch (error) {

@@ -35,7 +35,7 @@ class MovieRoutes {
       "/",
       authenticator as never,
       upload.single("image"),
-      uploadToCloudinary,
+      uploadToCloudinary as never,
       validator({ body: createMovieSchema }),
       this.controller.createMovie.bind(this.controller),
     );
@@ -43,12 +43,11 @@ class MovieRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
-      upload.array("images", 8),
-      //   upload.fields([
-      //     { name: "image", maxCount: 1 },
-      //     { name: "images", maxCount: 5 },
-      //   ]),
-      uploadToCloudinary,
+      upload.fields([
+        { name: "image", maxCount: 1 },
+        { name: "images", maxCount: 5 },
+      ]),
+      uploadToCloudinary as never,
       validator({ params: movieIdParamsSchema, body: updateMovieSchema }),
       this.controller.updateMovieById.bind(this.controller),
     );
