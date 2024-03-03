@@ -30,12 +30,7 @@ const SeatSchema = new mongoose.Schema<Seat>({
   },
   venue: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Theatre",
-  },
-  // TODO will update movieTime just after the creation of movieTime.
-  movieTime: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "MovieTime",
+    ref: "Venue",
   },
 });
 
