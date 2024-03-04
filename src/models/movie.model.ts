@@ -17,6 +17,11 @@ export interface Movie extends Document {
   ratingsAverage?: number;
   ratingsQuantity?: number;
   isPublished?: boolean;
+  year: string;
+  director: string;
+  plot: string;
+  country: string;
+  showtimes: string[];
 }
 
 const MovieSchema = new mongoose.Schema<Movie>(
@@ -69,6 +74,12 @@ const MovieSchema = new mongoose.Schema<Movie>(
       type: Boolean,
       default: false,
     },
+    showtimes: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },

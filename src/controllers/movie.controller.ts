@@ -1,13 +1,19 @@
 import { NextFunction, Response, Request } from "express";
+import { Movie } from "src/models/movie.model";
 import MovieService from "src/services/movie.service";
-import { GetMoviesQuery } from "src/validations/movie.schema";
+import { CreateMovieBody, GetMoviesQuery } from "src/validations/movie.schema";
 
 export default class MovieController {
   service = new MovieService();
 
-  async createMovie(req: Request, res: Response, next: NextFunction) {
+  async createMovie(
+    req: Request<unknown, unknown, CreateMovieBody, unknown>,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const data = await this.service.create(req.body);
+      const data: Movie = await this.service.create(req.body);
+
       res.json(data);
     } catch (error) {
       next(error);

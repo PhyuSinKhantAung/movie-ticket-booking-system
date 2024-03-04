@@ -7,6 +7,8 @@ export const createVenueSchema = z.object({
   }),
   region: z.string({ required_error: "region is required" }),
   location: z.string({ required_error: "location is required" }),
+  seatRows: z.coerce.number({ required_error: "seat rows is required" }),
+  seatColumns: z.coerce.number({ required_error: "seat columns is required" }),
 });
 
 export type CreateVenueBody = z.infer<typeof createVenueSchema>;
