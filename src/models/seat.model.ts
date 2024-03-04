@@ -10,6 +10,7 @@ export interface Seat extends Document {
   price: number;
   date: Date;
   showtime: string;
+  movie: mongoose.Schema.Types.ObjectId;
 }
 
 export enum SeatAvailability {
@@ -51,6 +52,10 @@ const SeatSchema = new mongoose.Schema<Seat>({
   venue: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Venue",
+  },
+  movie: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Movie",
   },
 });
 

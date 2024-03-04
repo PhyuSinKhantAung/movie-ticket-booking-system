@@ -3,13 +3,18 @@ dotenv.config();
 import express, { Application } from "express";
 import Server from "./app";
 import mongoose from "mongoose";
+import JobsLoader from "./loaders/jobs.loader";
 
 const app: Application = express();
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 new Server(app);
 
 const init = async () => {
+  const jobsLoader = new JobsLoader();
+
+  await jobsLoader.jobInitialized();
   await connectToDatabase();
+
   const server = app
     .listen(port, () => {
       console.log(`Server is running on port ${port}.`);

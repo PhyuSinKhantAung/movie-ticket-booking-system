@@ -29,6 +29,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "agenda": "^5.0.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
