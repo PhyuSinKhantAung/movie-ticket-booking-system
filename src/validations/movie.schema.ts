@@ -19,7 +19,8 @@ export const createMovieSchema = z.object({
     .optional(),
   genres: z.array(z.string()),
   releasedDate: z.coerce.date().transform(String).optional(),
-  duration: z.number({ required_error: "duration is required" }),
+  hour: z.coerce.number().default(2),
+  minute: z.coerce.number().default(0),
   language: z.string({ required_error: "language is required" }),
 });
 

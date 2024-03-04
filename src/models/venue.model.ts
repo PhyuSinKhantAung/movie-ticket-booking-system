@@ -4,6 +4,8 @@ export interface Venue extends Document {
   theatre: mongoose.Schema.Types.ObjectId;
   region: string;
   location: string;
+  seatRows: number;
+  seatColumns: number;
 }
 
 const VenueSchema = new mongoose.Schema<Venue>({
@@ -16,6 +18,10 @@ const VenueSchema = new mongoose.Schema<Venue>({
   region: String,
 
   location: String,
+
+  seatRows: Number,
+
+  seatColumns: Number,
 });
 
 export default mongoose.model<Venue>("Venue", VenueSchema);
