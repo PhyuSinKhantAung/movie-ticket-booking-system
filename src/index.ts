@@ -1,15 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { Application } from "express";
+import { Application } from "express";
 import Server from "./app";
 import mongoose from "mongoose";
 
-const app: Application = express();
+// const app: Application = express();
+// new Server(app);
+
+export const initApp = (): Application => {
+  const server = new Server(); // Initializes and configures the application
+  return server.app;
+};
+
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
-new Server(app);
 
 const init = async () => {
   await connectToDatabase();
+  const app = initApp();
   const server = app
     .listen(port, () => {
       console.log(`Server is running on port ${port}.`);

@@ -4,15 +4,18 @@ import helmet from "helmet";
 import Routes from "./routes";
 
 export default class Server {
-  constructor(app: Application) {
-    this.config(app);
-    new Routes(app);
+  public app: Application;
+
+  constructor(app?: Application) {
+    this.app = app || express();
+    this.config();
+    new Routes(this.app);
   }
 
-  private config(app: Application): void {
-    app.use(cors());
-    app.use(helmet());
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
+  private config(): void {
+    this.app.use(cors());
+    this.app.use(helmet());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
   }
 }
