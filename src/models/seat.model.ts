@@ -34,6 +34,7 @@ const SeatSchema = new mongoose.Schema<Seat>({
     type: String,
     enum: SeatAvailability,
     required: true,
+    default: "empty",
   },
   price: {
     type: Number,
