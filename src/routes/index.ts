@@ -7,6 +7,7 @@ import AdminRoutes from "./admin.routes";
 import TheatreRoutes from "./theatre.routes";
 import MovieRoutes from "./movie.routes";
 import VenueRoutes from "./venue.routes";
+import ShowtimeRoutes from "./showtime.routes";
 
 export default class Routes {
   router = Router();
@@ -19,6 +20,7 @@ export default class Routes {
     apiRouter.use("/users", UserRoutes);
     apiRouter.use("/movies", MovieRoutes);
     apiRouter.use("/venues", VenueRoutes);
+    apiRouter.use("/showtimes", ShowtimeRoutes);
 
     app.use("/api", apiRouter);
 

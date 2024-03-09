@@ -21,6 +21,8 @@ class APIFeatures<T extends Document> {
 
     this.queryObject = { ...customFilter, ...queryObj };
 
+    console.log(this.queryObject);
+
     return this;
   }
 
@@ -32,6 +34,8 @@ class APIFeatures<T extends Document> {
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    console.log(queryStr);
 
     this.query = this.query.find(JSON.parse(queryStr));
 
