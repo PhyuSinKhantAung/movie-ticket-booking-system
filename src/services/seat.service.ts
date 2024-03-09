@@ -42,6 +42,17 @@ export default class SeatService {
     return seat;
   }
 
+  async updateSeatStatuses(ids: string[], update: UpdateSeatStatusBody) {
+    ids.map(async (id) => {
+      const seat = await this.Model.findByIdAndUpdate(id, update, {
+        new: true,
+      });
+      if (!seat) throw new ContentNotFoundException("Seat not found");
+
+      return seat;
+    });
+  }
+
   async updateSeatStatusById(id: string, update: UpdateSeatStatusBody) {
     const seat = await this.Model.findByIdAndUpdate(id, update, {
       new: true,
