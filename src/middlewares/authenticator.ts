@@ -37,6 +37,8 @@ const authenticator = async function (
         : "",
     });
 
+    console.log("DECODED", decoded);
+
     // 3. check user exists
     if (decoded.type === "user") {
       await new UserService().getById(decoded.id);

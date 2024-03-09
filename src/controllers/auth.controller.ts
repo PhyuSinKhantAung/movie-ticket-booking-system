@@ -6,6 +6,7 @@ export interface TokenPayload {
   id: string;
   email: string;
   type: string;
+  role: string;
 }
 
 export default class AuthController {
@@ -47,6 +48,7 @@ export default class AuthController {
       id: decoded.id,
       email: decoded.email,
       type: decoded.type,
+      role: decoded.role,
     };
 
     const accessToken = await this.generateToken(

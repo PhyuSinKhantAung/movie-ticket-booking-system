@@ -27,6 +27,7 @@ export default class UserController {
         id: user._id.toString(),
         email: user.email,
         type: "user",
+        role: "",
       };
 
       const accessToken = await this.controller.generateToken(
@@ -68,6 +69,7 @@ export default class UserController {
         id: user._id.toString(),
         email: user.email,
         type: "user",
+        role: "",
       };
 
       const accessToken = await this.controller.generateToken(
@@ -150,6 +152,7 @@ export default class UserController {
         id: user._id.toString(),
         email: user.email,
         type: "user",
+        role: "",
       };
 
       const accessToken = await this.controller.generateToken(

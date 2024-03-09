@@ -52,6 +52,7 @@ export default class AdminController {
         id: admin._id.toString(),
         email: admin.email,
         type: "admin",
+        role: admin.role,
       };
 
       const accessToken = await this.controller.generateToken(

@@ -1,10 +1,13 @@
 import { NextFunction, Response, Request } from "express";
 import { Movie } from "src/models/movie.model";
+import AdminService from "src/services/admin.service";
 import MovieService from "src/services/movie.service";
+import convertHourAndMinIntoSeconds from "src/utils/convertHourAndMinIntoSeconds";
 import { CreateMovieBody, GetMoviesQuery } from "src/validations/movie.schema";
 
 export default class MovieController {
   service = new MovieService();
+  adminService = new AdminService();
 
   async createMovie(
     req: Request<unknown, unknown, CreateMovieBody, unknown>,
@@ -12,7 +15,13 @@ export default class MovieController {
     next: NextFunction,
   ) {
     try {
-      const data: Movie = await this.service.create(req.body);
+      const { hour, minute } = req.body;
+
+      const duration = convertHourAndMinIntoSeconds(hour, minute);
+
+      const payload = { ...req.body, duration };
+
+      const data: Movie = await this.service.create(payload);
 
       res.json(data);
     } catch (error) {

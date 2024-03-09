@@ -1,6 +1,5 @@
 import MovieModel from "src/models/movie.model";
 import APIFeatures from "src/utils/api-feature.util";
-import convertTimeToSeconds from "src/utils/convertHourAndMinIntoSeconds";
 import { ContentNotFoundException } from "src/utils/http-exceptions.util";
 import {
   CreateMovieBody,
@@ -12,11 +11,7 @@ export default class MovieService {
   Model = MovieModel;
 
   async create(data: CreateMovieBody) {
-    const duration = convertTimeToSeconds(data.hour, data.minute);
-
-    const payload = { ...data, duration };
-
-    const movie = await this.Model.create(payload);
+    const movie = await this.Model.create(data);
 
     return movie;
   }

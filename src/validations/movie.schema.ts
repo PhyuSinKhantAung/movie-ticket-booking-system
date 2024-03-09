@@ -2,7 +2,7 @@ import { z } from "zod";
 import mongoose from "mongoose";
 
 export const createMovieSchema = z.object({
-  theatre: z.string().refine((val) => {
+  theatre: z.string({ required_error: "theatre is required" }).refine((val) => {
     return mongoose.Types.ObjectId.isValid(val);
   }),
   title: z.string({ required_error: "Movie title is required" }),
@@ -20,7 +20,7 @@ export const createMovieSchema = z.object({
       }),
     )
     .optional(),
-  genres: z.array(z.string()),
+  genres: z.array(z.string({ required_error: "genre is required" })),
   releasedDate: z.coerce.date().transform(String).optional(),
   hour: z.coerce.number().default(2),
   minute: z.coerce.number().default(0),
@@ -34,7 +34,7 @@ export const createMovieSchema = z.object({
 export type CreateMovieBody = z.infer<typeof createMovieSchema>;
 
 export const getMoviesSchema = z.object({
-  theatre: z.string().refine((val) => {
+  theatre: z.string({ required_error: "theatre is required" }).refine((val) => {
     return mongoose.Types.ObjectId.isValid(val);
   }),
   search: z.string().optional(),
