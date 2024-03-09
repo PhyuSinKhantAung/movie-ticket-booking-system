@@ -15,7 +15,6 @@ export const reshapedSeatStructure = (
     (acc: Seat[], _, index) => {
       const row = Math.floor(index / cols) + 1;
       const column = (index % 10) + 1;
-      console.log(row, column);
 
       const seatPrices: { [key: string]: number } = {
         A: 3000,
