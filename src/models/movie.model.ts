@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 export interface Movie extends Document {
+  theatre: mongoose.Schema.Types.ObjectId;
   title: string;
   image?: {
     url: string;
@@ -14,18 +15,20 @@ export interface Movie extends Document {
   releasedDate: Date;
   duration: number;
   language: string;
-  ratingsAverage?: number;
-  ratingsQuantity?: number;
   isPublished?: boolean;
   year: string;
   director: string;
   plot: string;
   country: string;
-  showtimes: string[];
 }
 
 const MovieSchema = new mongoose.Schema<Movie>(
   {
+    theatre: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Theatre",
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -47,39 +50,20 @@ const MovieSchema = new mongoose.Schema<Movie>(
         required: true,
       },
     ],
-    releasedDate: {
-      type: Date,
-      // required: true,
-    },
     duration: {
       type: Number,
       required: true,
-    },
-    language: {
-      type: String,
-      required: true,
-    },
-    ratingsAverage: {
-      type: Number,
-      default: 4.5,
-      // min: [1, "Rating must be above 1.0"],
-      // max: [5, "Rating must be below 5.0"],
-      // set: (val) => Math.round(val * 10) / 10, // 4.666666, 46.6666, 47, 4.7
-    },
-    ratingsQuantity: {
-      type: Number,
-      default: 0,
     },
     isPublished: {
       type: Boolean,
       default: false,
     },
-    showtimes: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    releasedDate: Date,
+    language: String,
+    year: String,
+    director: String,
+    plot: String,
+    country: String,
   },
   {
     toJSON: { virtuals: true },
