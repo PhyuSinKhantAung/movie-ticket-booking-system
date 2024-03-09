@@ -1,15 +1,11 @@
 import mongoose, { Document } from "mongoose";
 
 export interface Seat extends Document {
-  venue: mongoose.Schema.Types.ObjectId;
-  row: string;
-  column: number;
   number: string;
   type: string;
   status: string;
   price: number;
-  date: Date;
-  showtime: string;
+  showtime: mongoose.Schema.Types.ObjectId;
 }
 
 export enum SeatAvailability {
@@ -18,22 +14,17 @@ export enum SeatAvailability {
   locked = "locked",
 }
 
+export enum SeatTypes {
+  single = "single",
+  double = "double",
+}
+
 const SeatSchema = new mongoose.Schema<Seat>({
-  row: {
-    type: String,
-    required: true,
-  },
-  column: {
-    type: Number,
-    required: true,
-  },
   type: {
     type: String,
+    enum: SeatTypes,
     required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
+    default: "single",
   },
   number: {
     type: String,
@@ -48,9 +39,9 @@ const SeatSchema = new mongoose.Schema<Seat>({
     type: Number,
     required: true,
   },
-  venue: {
+  showtime: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Venue",
+    ref: "Showtime",
   },
 });
 
