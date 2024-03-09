@@ -13,7 +13,6 @@ export const reshapedSeatStructure = (
 ): Seat[] => {
   const seats: Seat[] = Array.from({ length: rows * cols }).reduce(
     (acc: Seat[], _, index) => {
-      console.log("-->", _);
       const row = Math.floor(index / cols) + 1;
       const column = (index % 10) + 1;
       console.log(row, column);
