@@ -3,17 +3,17 @@ import mongoose from "mongoose";
 const SeatAvailabilityStatus = ["empty", "reserved", "locked"] as const;
 
 export const createSeatShema = z.object({
+  showtime: z
+    .string({ required_error: "showtime is required" })
+    .refine((val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    }),
   rows: z.coerce
     .number({ required_error: "rows is required" })
     .transform(String),
   columns: z.coerce
     .number({ required_error: "columns is required" })
     .transform(String),
-  showtime: z
-    .string({ required_error: "showtime is required" })
-    .refine((val) => {
-      return mongoose.Types.ObjectId.isValid(val);
-    }),
 });
 
 export type CreateSeatBody = z.infer<typeof createSeatShema>;

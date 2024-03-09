@@ -8,6 +8,7 @@ import TheatreRoutes from "./theatre.routes";
 import MovieRoutes from "./movie.routes";
 import VenueRoutes from "./venue.routes";
 import ShowtimeRoutes from "./showtime.routes";
+import SeatRoutes from "./seat.routes";
 
 export default class Routes {
   router = Router();
@@ -21,6 +22,7 @@ export default class Routes {
     apiRouter.use("/movies", MovieRoutes);
     apiRouter.use("/venues", VenueRoutes);
     apiRouter.use("/showtimes", ShowtimeRoutes);
+    apiRouter.use("/seats", SeatRoutes);
 
     app.use("/api", apiRouter);
 

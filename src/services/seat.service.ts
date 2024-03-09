@@ -11,9 +11,7 @@ export default class SeatService {
   async create(data: CreateSeatBody) {
     const { rows, columns, showtime } = data;
     const seats = reshapedSeatStructure(+rows, +columns, showtime);
-    const result = await this.Model.insertMany(seats);
-
-    return result;
+    await this.Model.insertMany(seats);
   }
 
   async getAll(query: GetSeatsQuery) {

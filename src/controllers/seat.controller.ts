@@ -7,8 +7,8 @@ export default class SeatController {
 
   async createSeat(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await this.service.create(req.body);
-      res.json(data);
+      await this.service.create(req.body);
+      res.json({ message: "Inserted seats successfully." });
     } catch (error) {
       next(error);
     }

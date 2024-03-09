@@ -26,18 +26,18 @@ export const getShowtimesSchema = z.object({
   page: z.coerce.number().default(1).transform(String),
   limit: z.coerce.number().default(10).transform(String),
   sort: z.string().optional().default("-createdAt"),
-  theatre: z.string().refine((val) => {
-    return mongoose.Types.ObjectId.isValid(val);
-  }),
-  venue: z.string({ required_error: "theatre is required" }).refine((val) => {
-    return mongoose.Types.ObjectId.isValid(val);
-  }),
-  movie: z
-    .string({ required_error: "theatre is required" })
+  theatre: z
+    .string()
     .refine((val) => {
       return mongoose.Types.ObjectId.isValid(val);
     })
     .optional(),
+  venue: z.string({ required_error: "theatre is required" }).refine((val) => {
+    return mongoose.Types.ObjectId.isValid(val);
+  }),
+  movie: z.string({ required_error: "theatre is required" }).refine((val) => {
+    return mongoose.Types.ObjectId.isValid(val);
+  }),
 });
 export type GetShowtimesQuery = z.infer<typeof getShowtimesSchema>;
 

@@ -5,7 +5,7 @@ export interface Seat extends Document {
   type: string;
   status: string;
   price: number;
-  showtime: mongoose.Schema.Types.ObjectId;
+  showtime: mongoose.Schema.Types.ObjectId | string;
 }
 
 export enum SeatAvailability {
