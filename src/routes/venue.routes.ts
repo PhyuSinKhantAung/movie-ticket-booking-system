@@ -36,7 +36,7 @@ class VenueRoutes {
       "/",
       authenticator as never,
       upload.single("image"),
-      uploadToCloudinary,
+      uploadToCloudinary as never,
       validator({ body: createVenueSchema }),
       this.controller.createVenue.bind(this.controller),
     );
@@ -45,7 +45,7 @@ class VenueRoutes {
       "/:id",
       authenticator as never,
       upload.single("image"),
-      uploadToCloudinary,
+      uploadToCloudinary as never,
       validator({ params: venueIdParamsSchema, body: updateVenueSchema }),
       this.controller.updateVenueById.bind(this.controller),
     );

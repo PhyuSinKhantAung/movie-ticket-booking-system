@@ -7,8 +7,6 @@ export const createVenueSchema = z.object({
   }),
   region: z.string({ required_error: "region is required" }),
   location: z.string({ required_error: "location is required" }),
-  seatRows: z.coerce.number({ required_error: "seat rows is required" }),
-  seatColumns: z.coerce.number({ required_error: "seat columns is required" }),
 });
 
 export type CreateVenueBody = z.infer<typeof createVenueSchema>;
@@ -19,12 +17,9 @@ export const getVenuesSchema = z.object({
   page: z.coerce.number().default(1).transform(String),
   limit: z.coerce.number().default(10).transform(String),
   sort: z.string().optional().default("-createdAt"),
-  theatre: z
-    .string({ required_error: "theatre is required" })
-    .refine((val) => {
-      return mongoose.Types.ObjectId.isValid(val);
-    })
-    .optional(),
+  theatre: z.string({ required_error: "theatre is required" }).refine((val) => {
+    return mongoose.Types.ObjectId.isValid(val);
+  }),
   region: z.string().optional(),
 });
 export type GetVenuesQuery = z.infer<typeof getVenuesSchema>;
