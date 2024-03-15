@@ -46,7 +46,6 @@ const authenticator = async function (
       await new AdminService().getById(decoded.id);
     }
 
-    //TODO will need to integrate with changing password logic
     req.user = decoded;
 
     next();

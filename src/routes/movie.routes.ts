@@ -9,6 +9,7 @@ import {
   updateMovieSchema,
 } from "src/validations/movie.schema";
 import MovieController from "src/controllers/movie.controller";
+import authorizor from "src/middlewares/authorizor";
 
 class MovieRoutes {
   router = Router();
@@ -34,6 +35,7 @@ class MovieRoutes {
     this.router.post(
       "/",
       authenticator as never,
+      authorizor({ roles: ["operator"], types: ["admin"] }) as never,
       upload.single("image"),
       uploadToCloudinary as never,
       validator({ body: createMovieSchema }),
@@ -43,6 +45,7 @@ class MovieRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
+      authorizor({ roles: ["operator"], types: ["admin"] }) as never,
       upload.fields([
         { name: "image", maxCount: 1 },
         { name: "images", maxCount: 5 },
@@ -55,6 +58,7 @@ class MovieRoutes {
     this.router.delete(
       "/:id",
       authenticator as never,
+      authorizor({ roles: ["operator"], types: ["admin"] }) as never,
       validator({ params: movieIdParamsSchema }),
       this.controller.deleteMovieById.bind(this.controller),
     );

@@ -11,6 +11,7 @@ import {
   getShowtimesSchema,
   showtimeIdParamsSchema,
 } from "src/validations/showtime.schema";
+import authorizor from "src/middlewares/authorizor";
 
 class VenueRoutes {
   router = Router();
@@ -24,6 +25,10 @@ class VenueRoutes {
     this.router.get(
       "/",
       authenticator as never,
+      authorizor({
+        roles: ["operator", "user"],
+        types: ["admin", "user"],
+      }) as never,
       validator({ query: getShowtimesSchema }),
       this.controller.getShowtimes.bind(this.controller),
     );
@@ -31,6 +36,10 @@ class VenueRoutes {
     this.router.get(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["operator", "user"],
+        types: ["admin", "user"],
+      }) as never,
       validator({ params: showtimeIdParamsSchema }),
       this.controller.getShowtimeById.bind(this.controller),
     );
@@ -38,6 +47,10 @@ class VenueRoutes {
     this.router.post(
       "/",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ body: createShowtimeSchema }),
       this.controller.createShowtime.bind(this.controller),
     );
@@ -45,6 +58,10 @@ class VenueRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ params: showtimeIdParamsSchema, body: updateShowtimeSchema }),
       this.controller.updateShowtimeById.bind(this.controller),
     );
@@ -52,6 +69,10 @@ class VenueRoutes {
     this.router.delete(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ params: showtimeIdParamsSchema }),
       this.controller.deleteShowtimeById.bind(this.controller),
     );

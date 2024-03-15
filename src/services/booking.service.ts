@@ -53,8 +53,4 @@ export default class BookingService {
     if (!booking) throw new ContentNotFoundException("Booking not found");
     return booking;
   }
-
-  async deleteById(id: string) {
-    await this.Model.findByIdAndDelete(id);
-  }
 }

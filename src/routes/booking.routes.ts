@@ -10,6 +10,7 @@ import {
   bookingIdParamsSchema,
   updateBookingStatusSchema,
 } from "src/validations/booking.schema";
+import authorizor from "src/middlewares/authorizor";
 
 class BookingRoutes {
   router = Router();
@@ -22,12 +23,22 @@ class BookingRoutes {
   initializeRoutes() {
     this.router.get(
       "/",
+      authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ query: getBookingsSchema }),
       this.controller.getBookings.bind(this.controller),
     );
 
     this.router.get(
       "/:id",
+      authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ params: bookingIdParamsSchema }),
       this.controller.getBookingById.bind(this.controller),
     );
@@ -35,6 +46,10 @@ class BookingRoutes {
     this.router.post(
       "/",
       authenticator as never,
+      authorizor({
+        roles: ["user"],
+        types: ["user"],
+      }) as never,
       upload.single("image"),
       uploadToCloudinary as never,
       validator({ body: createBookingSchema }),
@@ -44,6 +59,10 @@ class BookingRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["user", "operator"],
+        types: ["user", "admin"],
+      }) as never,
       upload.single("image"),
       uploadToCloudinary as never,
       validator({
@@ -51,13 +70,6 @@ class BookingRoutes {
         body: updateBookingStatusSchema,
       }),
       this.controller.updateBookingById.bind(this.controller),
-    );
-
-    this.router.delete(
-      "/:id",
-      authenticator as never,
-      validator({ params: bookingIdParamsSchema }),
-      this.controller.deleteBookingById.bind(this.controller),
     );
   }
 }

@@ -10,6 +10,7 @@ import {
   venueIdParamsSchema,
   updateVenueSchema,
 } from "src/validations/venue.schema";
+import authorizor from "src/middlewares/authorizor";
 
 class VenueRoutes {
   router = Router();
@@ -35,6 +36,10 @@ class VenueRoutes {
     this.router.post(
       "/",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       upload.single("image"),
       uploadToCloudinary as never,
       validator({ body: createVenueSchema }),
@@ -44,6 +49,10 @@ class VenueRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       upload.single("image"),
       uploadToCloudinary as never,
       validator({ params: venueIdParamsSchema, body: updateVenueSchema }),
@@ -53,6 +62,10 @@ class VenueRoutes {
     this.router.delete(
       "/:id",
       authenticator as never,
+      authorizor({
+        roles: ["operator"],
+        types: ["admin"],
+      }) as never,
       validator({ params: venueIdParamsSchema }),
       this.controller.deleteVenueById.bind(this.controller),
     );

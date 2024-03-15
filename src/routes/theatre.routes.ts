@@ -10,6 +10,7 @@ import {
   theatreIdParamsSchema,
   updateTheatreSchema,
 } from "src/validations/theatre.schema";
+import authorizor from "src/middlewares/authorizor";
 
 class TheatreRoutes {
   router = Router();
@@ -35,6 +36,7 @@ class TheatreRoutes {
     this.router.post(
       "/",
       authenticator as never,
+      authorizor({ roles: ["supervisor"], types: ["admin"] }) as never,
       upload.fields([{ name: "image", maxCount: 1 }]),
       uploadToCloudinary as never,
       validator({ body: createTheatreSchema }),
@@ -44,6 +46,7 @@ class TheatreRoutes {
     this.router.patch(
       "/:id",
       authenticator as never,
+      authorizor({ roles: ["supervisor"], types: ["admin"] }) as never,
       upload.fields([{ name: "image", maxCount: 1 }]),
       uploadToCloudinary as never,
       validator({ params: theatreIdParamsSchema, body: updateTheatreSchema }),
@@ -53,6 +56,7 @@ class TheatreRoutes {
     this.router.delete(
       "/:id",
       authenticator as never,
+      authorizor({ roles: ["supervisor"], types: ["admin"] }) as never,
       validator({ params: theatreIdParamsSchema }),
       this.controller.deleteTheatreById.bind(this.controller),
     );

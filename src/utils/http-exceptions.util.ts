@@ -24,6 +24,11 @@ export class NotAuthenticatedException extends HttpException {
   }
 }
 
+export class NotAuthorizedException extends HttpException {
+  constructor(message = "Not Authorized") {
+    super(403, message, "NotAuthorizedException");
+  }
+}
 export class ForbiddenException extends HttpException {
   constructor(message = "Forbidden") {
     super(403, message, "ForbiddenException");

@@ -54,15 +54,4 @@ export default class BookingController {
       next(error);
     }
   }
-
-  async deleteBookingById(req: Request, res: Response, next: NextFunction) {
-    try {
-      await this.service.deleteById(req.params.id);
-      res.json({
-        message: "Booking has been deleted.",
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
 }
