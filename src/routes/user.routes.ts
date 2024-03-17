@@ -1,4 +1,5 @@
 import {
+  editUserSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   signInUserSchema,
@@ -7,6 +8,8 @@ import {
 } from "./../validations/user.schema";
 import { Router } from "express";
 import UserController from "src/controllers/user.controller";
+import authenticator from "src/middlewares/authenticator";
+import authorizor from "src/middlewares/authorizor";
 import validator from "src/middlewares/validator";
 
 class UserRoutes {
@@ -50,6 +53,21 @@ class UserRoutes {
       "/refreshToken",
       validator({ body: tokenSchema }),
       this.controller.refreshToken.bind(this.controller),
+    );
+
+    this.router.get(
+      "/me",
+      authenticator as never,
+      authorizor({ roles: ["user"], types: ["user"] }) as never,
+      this.controller.getMe.bind(this.controller),
+    );
+
+    this.router.patch(
+      "/me",
+      authenticator as never,
+      authorizor({ roles: ["user"], types: ["user"] }) as never,
+      validator({ body: editUserSchema }),
+      this.controller.editMe.bind(this.controller),
     );
   }
 }

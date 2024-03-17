@@ -28,7 +28,7 @@ export const getBookingsSchema = z.object({
   page: z.coerce.number().default(1).transform(String),
   limit: z.coerce.number().default(10).transform(String),
   sort: z.string().optional().default("-createdAt"),
-  venue: z.string({ required_error: "theatre is required" }).refine((val) => {
+  venue: z.string({ required_error: "venue is required" }).refine((val) => {
     return mongoose.Types.ObjectId.isValid(val);
   }),
 });

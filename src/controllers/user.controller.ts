@@ -11,6 +11,7 @@ import AuthController from "./auth.controller";
 import { getMessage, sendEmail } from "src/utils/sendEmail.util";
 import { InternalServerException } from "src/utils/http-exceptions.util";
 import crypto from "crypto";
+import { IGetUserAuthInfoRequest } from "src/middlewares/authenticator";
 
 export default class UserController {
   controller = new AuthController();
@@ -191,6 +192,24 @@ export default class UserController {
           req.body.token,
         );
       res.json({ accessToken });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.service.getById(req.user.id);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async editMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.service.updateUserById(req.user.id);
+      res.json(result);
     } catch (error) {
       next(error);
     }

@@ -42,4 +42,10 @@ export default class UserService {
     if (!user) throw new BadRequestException("Invalid password reset token");
     return user;
   }
+
+  async updateUserById(id: string) {
+    const user = await this.Model.findByIdAndUpdate(id, { new: true });
+    if (!user) throw new ContentNotFoundException("User not found");
+    return user;
+  }
 }

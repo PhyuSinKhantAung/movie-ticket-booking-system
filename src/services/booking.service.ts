@@ -15,11 +15,13 @@ export default class BookingService {
     return booking;
   }
 
-  async getAll(query: GetBookingsQuery) {
+  async getAll(query: GetBookingsQuery, venueId: string, userId: string) {
     const customFilter = {
       ...(query.search
         ? { name: { $regex: query.search, $options: "i" } }
         : {}),
+      ...(venueId ? { venue: venueId } : {}),
+      ...(userId ? { user: userId } : {}),
     };
 
     const features = new APIFeatures(

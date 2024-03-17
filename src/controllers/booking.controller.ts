@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import BookingService from "src/services/booking.service";
 import SeatService from "src/services/seat.service";
 import { GetBookingsQuery } from "src/validations/booking.schema";
+import { VenueIdParams } from "src/validations/venue.schema";
 
 export default class BookingController {
   service = new BookingService();
@@ -22,12 +23,14 @@ export default class BookingController {
   }
 
   async getBookings(
-    req: Request<unknown, unknown, unknown, GetBookingsQuery>,
+    req: Request<VenueIdParams, unknown, unknown, GetBookingsQuery>,
     res: Response,
     next: NextFunction,
   ) {
     try {
-      const data = await this.service.getAll(req.query);
+      const venueId = req.params.id;
+      const userId = req.user.type === "user" ? req.user.id : null;
+      const data = await this.service.getAll(req.query, venueId, userId);
       res.json(data);
     } catch (error) {
       next(error);

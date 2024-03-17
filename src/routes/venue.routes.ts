@@ -1,3 +1,4 @@
+import BookingController from "src/controllers/booking.controller";
 import { Router } from "express";
 import VenueController from "src/controllers/venue.controller";
 import authenticator from "src/middlewares/authenticator";
@@ -15,6 +16,7 @@ import authorizor from "src/middlewares/authorizor";
 class VenueRoutes {
   router = Router();
   controller = new VenueController();
+  bookingController = new BookingController();
 
   constructor() {
     this.initializeRoutes();
@@ -31,6 +33,14 @@ class VenueRoutes {
       "/:id",
       validator({ params: venueIdParamsSchema }),
       this.controller.getVenueById.bind(this.controller),
+    );
+
+    this.router.get(
+      "/:id/bookings",
+      authenticator as never,
+      authorizor({ roles: ["operator"], types: ["admin"] }) as never,
+      validator({ params: venueIdParamsSchema }),
+      this.bookingController.getBookings.bind(this.controller),
     );
 
     this.router.post(

@@ -12,7 +12,7 @@ export const reshapedSeatStructure = (
   showtime: string,
 ): Seat[] => {
   const seats: Seat[] = Array.from({ length: rows * cols }).reduce(
-    (acc: Seat[], _, index) => {
+    (seats: Seat[], _, index) => {
       const row = Math.floor(index / cols) + 1;
       const column = (index % 10) + 1;
 
@@ -26,14 +26,14 @@ export const reshapedSeatStructure = (
       };
       const price = seatPrices[String.fromCharCode(64 + row)];
 
-      acc.push({
+      seats.push({
         type: price >= 12000 ? "double" : "single",
         number: `${String.fromCharCode(64 + row)}${column}`,
         status: "empty",
         price,
         showtime,
       });
-      return acc;
+      return seats;
     },
     [],
   );

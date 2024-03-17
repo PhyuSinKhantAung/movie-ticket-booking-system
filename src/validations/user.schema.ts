@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { z } from "zod";
 
 export const signUpUserSchema = z.object({
@@ -45,3 +46,19 @@ export const tokenSchema = z.object({
 });
 
 export type Token = z.infer<typeof tokenSchema>;
+
+export const userIdParamsSchema = z.object({
+  id: z.string().refine((val) => {
+    return mongoose.Types.ObjectId.isValid(val);
+  }),
+});
+
+export type UserIdParams = z.infer<typeof userIdParamsSchema>;
+
+export const editUserSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().optional(),
+  region: z.string().optional(),
+});
+
+export type EditUserBody = z.infer<typeof editUserSchema>;

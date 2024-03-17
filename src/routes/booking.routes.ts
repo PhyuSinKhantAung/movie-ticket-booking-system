@@ -2,7 +2,6 @@ import { Router } from "express";
 import BookingController from "src/controllers/booking.controller";
 import authenticator from "src/middlewares/authenticator";
 import validator from "src/middlewares/validator";
-import { upload, uploadToCloudinary } from "src/middlewares/imageUploader";
 
 import {
   createBookingSchema,
@@ -50,8 +49,6 @@ class BookingRoutes {
         roles: ["user"],
         types: ["user"],
       }) as never,
-      upload.single("image"),
-      uploadToCloudinary as never,
       validator({ body: createBookingSchema }),
       this.controller.createBooking.bind(this.controller),
     );
@@ -63,8 +60,6 @@ class BookingRoutes {
         roles: ["user", "operator"],
         types: ["user", "admin"],
       }) as never,
-      upload.single("image"),
-      uploadToCloudinary as never,
       validator({
         params: bookingIdParamsSchema,
         body: updateBookingStatusSchema,
